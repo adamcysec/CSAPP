@@ -3,7 +3,7 @@ import streamlit as st
 
 db = "duck.db"
 destination_table_name = "pypi"
-filename = "05-21-2023_pypy_info_main_db_audit.csv"
+filename = "pypi_info_db.csv"
 
 def execute_query(query: str, db: str, return_type: str = "df"):
     with duckdb.connect(db, read_only=True) as con:
@@ -14,19 +14,22 @@ def execute_query(query: str, db: str, return_type: str = "df"):
         elif return_type == "list":
             return con.execute(query).fetchall()
 
-
-#@st.experimental_memo  # An optimization wrapper to memoize the result of the function
 @st.cache_data
 def export_df(df):
     return df.to_csv(index=False).encode("utf-8")
 
-def load_file(db: str = "duck.db", infile_path: str = "05-21-2023_pypy_info_main_db_audit.csv", table_name: str = "pypi"):
+def load_file(db: str = "duck.db", infile_path: str = "pypi_info_db.csv", table_name: str = "pypi"):
     with duckdb.connect(db) as conn:
         conn.execute(f"CREATE OR REPLACE TABLE {table_name} as SELECT * FROM read_csv_auto('{infile_path}')")
     return True
 
 def main():
+    st.set_page_config(
+    page_title="Pypi Threat Hunting",
+    page_icon="🔍",
+    )
     st.title("Pypi Threat Hunting")
+
     try:
         #button = st.button(label="Get Started")
         #if button:
@@ -65,8 +68,12 @@ def main():
         filter_by = st.selectbox(label="Select a Value", options=value_list, key="rank_filter")
         
         if filter_by != "--":
-            if "'" in filter_by:
-                filter_by = filter_by.replace("'", "''")
+            
+            if type(filter_by) == str:
+                # check for ' in string values
+                if "'" in filter_by:
+                    # sql escape '
+                    filter_by = filter_by.replace("'", "''")
 
             result = execute_query(
                 f"select * from {destination_table_name} where {filter_option} = '{filter_by}'",
@@ -76,7 +83,7 @@ def main():
             st.dataframe(result, height=400)
 
             #st.write(f"select * from {destination_table_name} where {filter_option} = '{filter_by}'")
-            st.write(f"Total Records: {len(result)}")
+            st.write(f"Total Records: {len(result):,}")
 
 
             # To download the data we have just selected
@@ -89,8 +96,7 @@ def main():
                 key="download-csv",
             )
     except duckdb.CatalogException:  # Catch exception when the database file don't exist yet
-        st.text("Please Clik on the above button to start hunting.")
+        st.text("Please Click on the above button to start hunting.")
 
 if __name__ == "__main__":
-    
     main()
