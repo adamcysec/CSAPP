@@ -3,7 +3,7 @@ import streamlit as st
 
 db = "duck.db"
 destination_table_name = "pypi"
-filename = "07-14-2023_pypi_info_main_db_audit.csv"
+filename = "pypi_info_db.csv"
 
 def execute_query(query: str, db: str, return_type: str = "df"):
     with duckdb.connect(db, read_only=True) as con:
