@@ -8,6 +8,9 @@ CSAPP (*c-sap*) is a suite of tools for Collecting, Storing, and Analyzing Pytho
 
 CSAPP uses Streamlit to host a local Web App for querying and exploring the data witin a CSV file containing Python package information for every project on [PyPI.org](https://pypi.org/).
 
+CSAPP also comes with several other scripts for managing the pypi_info_main_db.csv file:
+
+
 ## Dependencies
 pypi_streamlit.py requires the following dependencies:
 - [streamlit](https://pypi.org/project/streamlit/)
@@ -31,8 +34,9 @@ pypi_package_validator.py requires the following dependencies:
 `git clone https://github.com/adamcysec/CSAPP.git`
 
 2. Download the PyPI data CSV file: [pypi_info_main_db.csv](https://drive.google.com/file/d/1KXrtPr2qzZ91F6DLiPbZEwpIV0S6eGjR)
+   - Due to the file size being about 166 MB, i have to host the file on Google Drive.
 
-3. Store the CSV file in the CSAPP directory 
+4. Store the CSV file in the CSAPP directory 
 
 
 <br/>
