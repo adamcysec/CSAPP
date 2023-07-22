@@ -32,10 +32,3 @@ pypi_package_validator.py requires the following dependencies:
 **Example 1**
 
 `streamlit run pypi_streamlist.py`
-
-`py breach-parse.py @yahoo.com yahoo`
-
-- Search data with `@yahoo.com`
-- Outputs `yahoo.txt`
-
-**Example 2**
