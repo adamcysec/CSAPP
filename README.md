@@ -29,6 +29,8 @@ pypi_package_validator.py requires the following dependencies:
 <br/>
 <br/>
 
+## Usage
+
 **Example 1**
 
 `streamlit run pypi_streamlist.py`
