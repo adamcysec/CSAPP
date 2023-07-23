@@ -10,6 +10,12 @@ CSAPP uses Streamlit to host a local Web App for querying and exploring the data
 
 CSAPP also comes with several other scripts for managing the pypi_info_main_db.csv file:
 
+- pypi_package_harvest.py
+  - Collects and stores new PyPI records in the CSV file.
+- py_package_validator.py
+  - Removes PyPI records from the CSV file that no longer exist on pypi.org
+- audit_pypi_info_db.py
+  - Removes errors in records from the CSV file.
 
 ## Dependencies
 pypi_streamlit.py requires the following dependencies:
