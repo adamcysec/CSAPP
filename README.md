@@ -32,15 +32,16 @@ pypi_package_validator.py requires the following dependencies:
 
 ## Installation
 
-1. git clone repo
+1. git clone repo:
+   
 `git clone https://github.com/adamcysec/CSAPP.git`
 
-2. Pip install any missing dependencies 
+3. Pip install any missing dependencies 
 
-3. Download the PyPI data CSV file: [pypi_info_main_db.csv](https://drive.google.com/file/d/1KXrtPr2qzZ91F6DLiPbZEwpIV0S6eGjR)
+4. Download the PyPI data CSV file: [pypi_info_main_db.csv](https://drive.google.com/file/d/1KXrtPr2qzZ91F6DLiPbZEwpIV0S6eGjR)
    - Due to the file size being about 166 MB, i have to host the file on Google Drive.
 
-4. Store the CSV file in the CSAPP directory 
+5. Store the CSV file in the CSAPP directory 
 
 
 <br/>
