@@ -22,7 +22,9 @@ pypi_data_harvest.py requires the following dependencies:
 - librariesio (included in repo)
 - pypilib (included in repo)
 - [beautifulsoup4](https://pypi.org/project/beautifulsoup4/)
-  - `pip install beautifulsoup4` 
+  - `pip install beautifulsoup4`
+- [requests](https://pypi.org/project/requests/)
+  - `pip install requests`
 
 pypi_package_validator.py requires the following dependencies:
 - [argparse](https://pypi.org/project/argparse/)
@@ -33,7 +35,9 @@ pypi_package_validator.py requires the following dependencies:
 1. git clone repo
 `git clone https://github.com/adamcysec/CSAPP.git`
 
-2. Download the PyPI data CSV file: [pypi_info_main_db.csv](https://drive.google.com/file/d/1KXrtPr2qzZ91F6DLiPbZEwpIV0S6eGjR)
+2. Pip install any missing dependencies 
+
+3. Download the PyPI data CSV file: [pypi_info_main_db.csv](https://drive.google.com/file/d/1KXrtPr2qzZ91F6DLiPbZEwpIV0S6eGjR)
    - Due to the file size being about 166 MB, i have to host the file on Google Drive.
 
 4. Store the CSV file in the CSAPP directory 
