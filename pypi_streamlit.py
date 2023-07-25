@@ -6,6 +6,9 @@ db = "duck.db"
 destination_table_name = "pypi"
 filename = "pypi_info_db.csv"
 
+if not os.path.exists(filename):
+    filename = "sample_pypi_info_db.csv"
+
 def execute_query(query: str, db: str, return_type: str = "df"):
     with duckdb.connect(db, read_only=True) as con:
         if return_type == "df":
@@ -34,8 +37,6 @@ def main():
     try:
         #button = st.button(label="Get Started")
         #if button:
-        if not os.path.exists(filename):
-            filename = "sample_pypi_info_db.csv"
         
         load_file(db=db, infile_path=filename, table_name=destination_table_name)
 
