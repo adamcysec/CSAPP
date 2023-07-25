@@ -1,5 +1,6 @@
 import duckdb
 import streamlit as st
+import os.path
 
 db = "duck.db"
 destination_table_name = "pypi"
@@ -33,6 +34,9 @@ def main():
     try:
         #button = st.button(label="Get Started")
         #if button:
+        if not os.path.exists(filename):
+            filename = "sample_pypi_info_db.csv"
+        
         load_file(db=db, infile_path=filename, table_name=destination_table_name)
 
         data = execute_query(f"select * from {destination_table_name}", db=db, return_type="df")
