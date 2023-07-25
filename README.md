@@ -6,16 +6,16 @@ CSAPP (*c-sap*) is a suite of tools for Collecting, Storing, and Analyzing Pytho
 
 ## Description
 
-CSAPP uses Streamlit to host a local Web App for querying and exploring the data witin a CSV file containing Python package information for every project on [PyPI.org](https://pypi.org/).
+CSAPP uses Streamlit to host a local Web App for querying and exploring the data set witin a CSV file containing Python package information for every project on [PyPI.org](https://pypi.org/).
 
-CSAPP also comes with several other scripts for managing the pypi_info_db.csv file:
+CSAPP also comes with several other scripts for managing the pypi_info_db.csv data set:
 
 - pypi_package_harvest.py
-  - Collects and stores new PyPI records in the CSV file.
+  - Collects and stores new PyPI records in the data set.
 - py_package_validator.py
-  - Removes PyPI records from the CSV file that no longer exist on pypi.org
+  - Removes PyPI records from the data set that no longer exist on pypi.org
 - audit_pypi_info_db.py
-  - Removes errors in records from the CSV file.
+  - Removes errors in records from the data set.
 
 ## Dependencies
 pypi_streamlit.py requires the following dependencies:
@@ -44,10 +44,10 @@ pypi_package_validator.py requires the following dependencies:
 
 3. Pip install any missing dependencies 
 
-4. Download the PyPI data CSV file: [pypi_info_db.csv](https://drive.google.com/file/d/1KXrtPr2qzZ91F6DLiPbZEwpIV0S6eGjR)
+4. Download the PyPI data set CSV file: [pypi_info_db.csv](https://drive.google.com/file/d/1KXrtPr2qzZ91F6DLiPbZEwpIV0S6eGjR)
    - Due to the file size being about 166 MB, i have to host the file on Google Drive.
 
-5. Store the CSV file in the CSAPP directory 
+5. Store the data set CSV file in the CSAPP directory 
 
 
 <br/>
