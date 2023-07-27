@@ -1,6 +1,6 @@
 from pathlib import Path
-from pypilib import pypilib
-from librariesio import librariesio
+from csapptools import librariesiolib
+from csapptools import pypilib
 import os
 import csv
 import time
@@ -16,11 +16,11 @@ def get_args():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent('''Examples:
         py pypi_data_harvest.py
-        py pypi_data_harvest.py --update "07-14-2023_pypi_info_main_db_audit.csv"
+        py pypi_data_harvest.py --update "pypi_info_db.csv"
         ''')
     )
 
-    parser.add_argument('-u', '--update', action='store', type=str, required=True, help="file to update")
+    parser.add_argument('-u', '--update', action='store', type=str, required=False, help="file to update")
 
     args = parser.parse_args() # parse arguments
 
@@ -40,16 +40,17 @@ def main():
         collected_packages = get_current_package_list(pypi_db_csv_file)
     
     else:
-        date_today = datetime.now().strftime('%m-%d-%Y')
-        pypi_db_csv_file = f'{date_today}_pypi_info_db.csv' # new csv file
+        #date_today = datetime.now().strftime('%m-%d-%Y')
+        #pypi_db_csv_file = f'{date_today}_pypi_info_db.csv' # new csv file
+        pypi_db_csv_file = 'pypi_info_db.csv' # new csv file
         collected_packages = []
     
     # get libraries.io api key
     api_key = get_api_key()
-    librariesio_obj = librariesio(api_key)
+    librariesio_obj = librariesiolib.librariesiolib(api_key)
 
     # get list of pypi projects
-    pypilib_obj = pypilib()
+    pypilib_obj = pypilib.pypilib()
     pypi_packages_list = pypilib_obj.get_simple()
 
     api_count = 1
