@@ -8,6 +8,8 @@ CSAPP (*c-sap*) is a suite of tools for Collecting, Storing, and Analyzing Pytho
 
 CSAPP uses Streamlit to host a local Web App for querying and exploring the data set witin a CSV file containing Python package information for every project on [PyPI.org](https://pypi.org/).
 
+Try out the application on Streamlit with a sample data set!! --> [csapp-adamcysec.streamlit.app](https://csapp-adamcysec.streamlit.app/)
+
 CSAPP also comes with several other scripts for managing the pypi_info_db.csv data set:
 
 - pypi_package_harvest.py
