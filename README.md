@@ -25,8 +25,8 @@ pypi_streamlit.py requires the following dependencies:
   - `pip install duckdb` 
 
 pypi_data_harvest.py requires the following dependencies:
-- librariesio (included in repo)
-- pypilib (included in repo)
+- [csapptools](https://pypi.org/project/csapptools/)
+  - `pip install csapptools`
 - [beautifulsoup4](https://pypi.org/project/beautifulsoup4/)
   - `pip install beautifulsoup4`
 - [requests](https://pypi.org/project/requests/)
