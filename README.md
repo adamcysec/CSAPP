@@ -41,8 +41,10 @@ pypi_package_validator.py requires the following dependencies:
 ## Installation
 
 1. git clone repo:
-   
-`git clone https://github.com/adamcysec/CSAPP.git`
+
+```
+git clone https://github.com/adamcysec/CSAPP.git
+```
 
 3. Pip install any missing dependencies 
 
