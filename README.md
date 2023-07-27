@@ -64,8 +64,8 @@ py pypi_data_harvest.py --update "pypi_info_db.csv"
 <br/>
 <br/>
 
-## Usage
+## Run The Web App Locally
 
-**Example 1**
+Streamlit is only hosting the web app with a sample of the data set, therefore you will want to run the app locally to use the full data set:
 
 `streamlit run pypi_streamlist.py`
