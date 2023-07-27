@@ -1,3 +1,4 @@
+csapptools
 bs4
 requests
 duckdb
