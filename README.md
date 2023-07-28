@@ -67,4 +67,6 @@ py pypi_data_harvest.py --update "pypi_info_db.csv"
 
 [Streamlit](https://csapp-adamcysec.streamlit.app/) is only hosting the web app with a sample of the data set, therefore you will want to run the app locally to use the full data set:
 
-`streamlit run pypi_streamlit.py`
+```
+streamlit run pypi_streamlit.py
+```
