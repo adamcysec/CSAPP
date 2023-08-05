@@ -59,7 +59,7 @@ New PyPI packages are uploaded every day, therefore you will want to update the 
 
 > 📘 **Note**
 >
-> **pypi_data_harvest.py requires an API key for [libraries.io](https://libraries.io/)**
+> **pypi_data_harvest.py requires an API key from [libraries.io](https://libraries.io/)**
 
 ### Configure libraries.io API Key
 
