@@ -73,6 +73,10 @@ Run tool pypi_data_harvest.py to update the data set:
 
 ```
 py pypi_data_harvest.py --update "pypi_info_db.csv"
+
+Or
+
+py pypi_data_harvest.py --update "pypi_info_db.csv" -k "C:\\apikey.txt"
 ```
 
 ## Run The Web App Locally
