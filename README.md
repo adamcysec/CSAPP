@@ -57,6 +57,18 @@ git clone https://github.com/adamcysec/CSAPP.git
 
 New PyPI packages are uploaded every day, therefore you will want to update the data set before use.
 
+> 📘 **Note**
+>
+> **pypi_data_harvest.py requires an API key for [libraries.io](https://libraries.io/)**
+
+### Configure libraries.io API Key
+
+1. Create an account on [libraries.io](https://libraries.io/)
+2. Create hidden directory in your user's home folder called `.librariesio`
+3. Saved libraries.io api key in a txt file called `api_key.txt`
+
+Or use the `--apikey` parameter to pass in your api key file.
+
 Run tool pypi_data_harvest.py to update the data set:
 
 ```
