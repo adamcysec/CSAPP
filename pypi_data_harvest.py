@@ -17,10 +17,15 @@ def get_args():
         epilog=textwrap.dedent('''Examples:
         py pypi_data_harvest.py
         py pypi_data_harvest.py --update "pypi_info_db.csv"
+        py pypi_data_harvest.py --u "pypi_info_db.csv"
+        py pypi_data_harvest.py -u "pypi_info_db.csv" -v
+        py pypi_data_harvest.py -u "pypi_info_db.csv" -k "C:\\apikey.txt"                 
         ''')
     )
 
     parser.add_argument('-u', '--update', action='store', type=str, required=False, help="file to update")
+    parser.add_argument('-k', '--apikey', action='store', type=str, required=False, help="file path to libraries.io api key")
+    parser.add_argument('--verbose', '-v', action='store_true', help="print verbose output")
 
     args = parser.parse_args() # parse arguments
 
@@ -32,6 +37,8 @@ def main():
     start_time = time.time()
     args = get_args()
     update = args['update']
+    verbose = args['verbose']
+    api_key_file =  args['apikey']
 
     # check update file is given
     if update:
@@ -46,7 +53,7 @@ def main():
         collected_packages = []
     
     # get libraries.io api key
-    api_key = get_api_key()
+    api_key = get_api_key(api_key_file)
     librariesio_obj = librariesiolib.librariesiolib(api_key)
 
     # get list of pypi projects
@@ -63,91 +70,92 @@ def main():
         
         # eval if we have already collected the package before making a request
         if pypi_package['name'] in collected_packages:
-            #print(f"already collected: {pypi_package['name']}")
+            if verbose:
+                print(f"already collected: {pypi_package['name']}")
             continue # already collected.. skip package
+        
+        package_exists = valid_pypi_package(pypi_package['name'])
+        
+        if package_exists:
+            print(f"working project: {pypi_package['name']}")
+            package_info_json, failure = librariesio_obj.get_pypi_package(pypi_package['name'])
 
-        print(f"working project: {pypi_package['name']}")
-        package_info_json, failure = librariesio_obj.get_pypi_package(pypi_package['name'])
+            # handle request failures
+            while failure:
+                if failure == 'json':
+                    #one_hour_failures += 1
+                    print("libraries.io connection error.. sleeping for one hour..")
+                    time.sleep(3600)
+                    print(f"trying package {pypi_package['name']} again...")
+                    package_info_json, failure = librariesio_obj.get_pypi_package(pypi_package['name'])
+                else:
+                    print("sleeping for 60 seconds...")
+                    time.sleep(60)
+                    package_info_json, failure = librariesio_obj.get_pypi_package(pypi_package['name'])
 
-        # handle request failures
-        while failure:
-            if failure == 'json':
-                #one_hour_failures += 1
-                print("libraries.io connection error.. sleeping for one hour..")
-                time.sleep(3600)
-                print(f"trying package {pypi_package['name']} again...")
-                package_info_json, failure = librariesio_obj.get_pypi_package(pypi_package['name'])
-            else:
+            if package_info_json == None and failure == False:
+                print(f"skipping project: {pypi_package['name']}")
+                continue
+
+            # enrich data collected
+            #######################
+            # add field total_versions
+            package_info_json['total_versions'] = {}
+            try:
+                package_info_json['total_versions'] = len(package_info_json['versions'])
+            except:
+                package_info_json['total_versions'] = 0
+            
+            # limit 'licenses' field to 120 characters
+            if package_info_json['licenses']:
+                if len(package_info_json['licenses']) > 120:
+                    package_info_json['licenses'] = package_info_json['licenses'][:120]
+
+            # remove 'versions' field
+            del package_info_json['versions']
+
+            # remove 'contributions_count' field
+            # this field was recently added to libraries.io
+            del package_info_json['contributions_count']
+            
+            # pypi data enrichment
+            #######################
+            # get additional metadata from pypi
+            metadata_dict = get_pypi_metadata(pypi_package['name'])
+
+            # add maintainers
+            maintainers = metadata_dict['maintainers']
+            maintainers = str(maintainers).replace('[','')
+            maintainers = str(maintainers).replace(']','')
+            package_info_json['maintainers'] = {}
+            package_info_json['maintainers'] = maintainers
+
+            # add latest_upload_date and latest_upload_time
+            upload_date, upload_time = format_date_time(package_info_json['latest_release_published_at'])
+            package_info_json['latest_upload_date'] = {}
+            package_info_json['latest_upload_time'] = {}
+            package_info_json['latest_upload_date'] = upload_date
+            package_info_json['latest_upload_time'] = upload_time
+
+            # add first_upload_date
+            first_upload_date = metadata_dict['first_upload_date']
+            package_info_json['first_upload_date'] = {}
+            package_info_json['first_upload_date'] = first_upload_date
+
+            # add package data 
+            librarisio_packages_info.append(package_info_json)
+            api_count += 1
+            new_packages_collected += 1
+
+            # save data collected
+            if api_count == limit:
+                out_csv_file(librarisio_packages_info, pypi_db_csv_file) # save each batch to file
+                librarisio_packages_info = [] # reset list
+                api_count = 1 # reset request count
+                
+                print("api count limit")
                 print("sleeping for 60 seconds...")
                 time.sleep(60)
-                package_info_json, failure = librariesio_obj.get_pypi_package(pypi_package['name'])
-
-        if failure == False and package_info_json == None:
-            print(f"skipping project: {pypi_package['name']}")
-            continue
-
-        # enrich data collected
-        #######################
-        # add field total_versions
-        package_info_json['total_versions'] = {}
-        try:
-            package_info_json['total_versions'] = len(package_info_json['versions'])
-        except:
-            package_info_json['total_versions'] = 0
-        
-        # limit 'licenses' field to 120 characters
-        if package_info_json['licenses']:
-            if len(package_info_json['licenses']) > 120:
-                package_info_json['licenses'] = package_info_json['licenses'][:120]
-
-        # remove 'versions' field
-        del package_info_json['versions']
-
-        # remove 'contributions_count' field
-        # this field was recently added to libraries.io
-        del package_info_json['contributions_count']
-
-        # get additional metadata from pypi
-        metadata_dict = get_pypi_metadata(pypi_package['name'])
-        
-        # add maintainers
-        maintainers = metadata_dict['maintainers']
-        maintainers = str(maintainers).replace('[','')
-        maintainers = str(maintainers).replace(']','')
-        package_info_json['maintainers'] = {}
-        package_info_json['maintainers'] = maintainers
-
-        # add latest_upload_date and latest_upload_time
-        upload_date, upload_time = format_date_time(package_info_json['latest_release_published_at'])
-        package_info_json['latest_upload_date'] = {}
-        package_info_json['latest_upload_time'] = {}
-        package_info_json['latest_upload_date'] = upload_date
-        package_info_json['latest_upload_time'] = upload_time
-
-        # add first_upload_date
-        first_upload_date = metadata_dict['first_upload_date']
-        package_info_json['first_upload_date'] = {}
-        package_info_json['first_upload_date'] = first_upload_date
-
-        # either libraries.io or pypi indicates package was removed
-        if package_info_json['status'] == "Removed" or package_info_json['first_upload_date'] == 'none':
-            print(f"skipping project; removed: {pypi_package['name']}")
-            continue
-
-        # add package data 
-        librarisio_packages_info.append(package_info_json)
-        api_count += 1
-        new_packages_collected += 1
-
-        # save data collected
-        if api_count == limit:
-            out_csv_file(librarisio_packages_info, pypi_db_csv_file) # save each batch to file
-            librarisio_packages_info = [] # reset list
-            api_count = 1 # reset request count
-            
-            print("api count limit")
-            print("sleeping for 60 seconds...")
-            time.sleep(60)
     
     # save remaining data collected
     if librarisio_packages_info:
@@ -156,7 +164,7 @@ def main():
     print(f"--- Completed in {time.time() - start_time} seconds ---")
     print(f"total new pypi projects collected: {new_packages_collected}")
 
-def get_api_key():
+def get_api_key(api_key_file):
     """read in libraries.io api key
 
     return:
@@ -165,8 +173,11 @@ def get_api_key():
         libraries.io api key
     """
     
-    user_home_path = Path.home()
-    api_key_path = os.path.join(user_home_path, '.librariesio', 'api_key.txt')
+    if api_key_file:
+        api_key_path = api_key_file
+    else:
+        user_home_path = Path.home()
+        api_key_path = os.path.join(user_home_path, '.librariesio', 'api_key.txt')
 
     with open(api_key_path, 'r') as file:
         api_key = file.read()
@@ -197,6 +208,33 @@ def get_current_package_list(csv_filepath):
             packages.append(package_name)
         
     return packages
+
+def valid_pypi_package(package_name):
+    """Perform HEAD request to ensure package exists
+
+    pypi's simple api commonly returns
+    packages that no longer exist.
+
+    Parameters:
+    -----------
+    package_name : str
+        pypi package name
+    
+    Returns:
+    --------
+    package_exists : bool
+        True : package exists on pypi
+    """
+
+    package_exists = True
+
+    url = f"https://pypi.org/project/{package_name}/"
+    response = requests.head(url)
+
+    if response.status_code == 404:
+        package_exists = False
+
+    return package_exists
 
 def get_pypi_metadata(package_name):
     """extract metadata from pypi package url html response
