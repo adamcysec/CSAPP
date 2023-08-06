@@ -1,11 +1,34 @@
 import csv
 from datetime import datetime
 
+import argparse
+import textwrap
+
+def get_args():
+    parser = argparse.ArgumentParser(
+        description="",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=textwrap.dedent('''Examples:
+        py audit_pypi_info_db.py -f "pypi_info_db.csv"
+        ''')
+    )
+
+    parser.add_argument('-f', '--file', action='store', type=str, required=True, help="path to data set CSV file")
+
+    args = parser.parse_args() # parse arguments
+
+    args_dict = vars(args)
+
+    return args_dict
+
 def main():
+    args = get_args()
+    pypi_db_file = args['file']
+    
     new_csv_file_name = 'new_pypi_info_main_db.csv'
 
 
-    with open('pypi_info_main_db.csv', 'r', encoding='utf-8') as input_csv_file:
+    with open(pypi_db_file, 'r', encoding='utf-8') as input_csv_file:
         with open(new_csv_file_name, 'w', encoding='utf-8') as new_csv_file:
             csv_reader = csv.reader(input_csv_file)
             csv_writer = csv.writer(new_csv_file, lineterminator='\n')
@@ -450,9 +473,6 @@ def eval_repository_url(row):
 
 def eval_stars(row):
     stars =  row[23]
-    
-    if stars == 'https://github.com/cranedroesch/ACD_helpers':
-        print()
     
     stars, error = eval_num(stars)
     row[23] = stars
