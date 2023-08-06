@@ -49,7 +49,7 @@ git clone https://github.com/adamcysec/CSAPP.git
 3. Pip install any missing dependencies 
 
 4. Download the full PyPI data set CSV file: [pypi_info_db.csv](https://drive.google.com/file/d/1uYDHmn9lZ7EhrjFIMnhqKr_SpWjDFZqO)
-   - Due to the file size being about 166 MB, i have to host the file on Google Drive.
+   - Due to the file size being about 160 MB, i have to host the file on Google Drive.
 
 5. Store the data set CSV file in the CSAPP directory
 
