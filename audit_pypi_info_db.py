@@ -6,7 +6,7 @@ import textwrap
 
 def get_args():
     parser = argparse.ArgumentParser(
-        description="",
+        description="Removes errors in records from the data set.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent('''Examples:
         py audit_pypi_info_db.py -f "pypi_info_db.csv"
