@@ -11,7 +11,7 @@ TIMEOUT = 5
 
 def get_args():
     parser = argparse.ArgumentParser(
-        description="",
+        description="Removes PyPI records from the data set that no longer exist on pypi.org",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent('''Examples:
         pypi_package_validator.py -f "pypi_info_main_db.csv"
@@ -83,6 +83,10 @@ def main():
 
     # save new csv with only valid urls
     save_valid_urls(input_csv, invalid_urls, new_csv_file_name)
+
+    # remove the tmp file.. no longer needed
+    if os.path.exists("validator_worked_urls.tmp"):
+        os.remove("validator_worked_urls.tmp")
 
     print(f"--- Script Completed in {time.time() - start_time} seconds ---")
    
