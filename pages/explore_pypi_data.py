@@ -22,23 +22,23 @@ def execute_query(query: str, db: str, return_type: str = "df"):
 def export_df(df):
     return df.to_csv(index=False).encode("utf-8")
 
-def load_file(db: str = "duck.db", infile_path: str = "06-04-2023_pypy_info_main_db_audit.csv", table_name: str = "pypi"):
+def load_file(db: str = "duck.db", infile_path: str = "pypi_info_db.csv", table_name: str = "pypi"):
     with duckdb.connect(db) as conn:
         conn.execute(f"CREATE OR REPLACE TABLE {table_name} as SELECT * FROM read_csv_auto('{infile_path}')")
     return True
 
 def main():
     st.set_page_config(
-    page_title="Pypi Threat Hunting",
+    page_title="PyPI Threat Hunting",
     page_icon="🔍",
     )
-    st.title("Pypi Threat Hunting")
+    st.title("PyPI Threat Hunting")
 
     try:
         load_file(db=db, infile_path=filename, table_name=destination_table_name)
 
         st.write("## Submit SQL Query")
-        default_query = f"SELECT name,rank,description,latest_release_published_at,package_manager_url,repository_url,maintainers,homepage,stars,latest_release_number,forks,total_versions\nFROM {destination_table_name}\nWHERE"
+        default_query = f"SELECT first_upload_date,name,rank,description,latest_release_published_at,package_manager_url,repository_url,maintainers,homepage,stars,latest_release_number,forks,total_versions\nFROM {destination_table_name}\nWHERE"
         
         user_query = st.text_area("Enter SQL query", value=default_query, height=200)
 
@@ -52,12 +52,16 @@ def main():
                     return_type="df",
             )
             
-            try:
-                # Set Date as index.
-                result = result.set_index('latest_upload_date')
-                result.index = result.index.date
-            except:
-                pass
+            # this will pin the date column to the left hand side
+            # sorta fixes the date time displayed to only the yyyy-mm-dd
+            # not required at this time
+            #try:
+            #    # Set Date as index.
+            #    result = result.set_index('latest_upload_date')
+            #    result.index = result.index.date
+            #except:
+            #    pass
+            
             
             total_records_returned = len(result)
             if total_records_returned<=5:
