@@ -90,7 +90,7 @@ py pypi_data_harvest.py --update "pypi_info_db.csv" -k "C:\\apikey.txt"
 streamlit run pypi_streamlit.py
 ```
 
-Note if you have more than one version of python installed you may need to run streamlit like so:
+Note: if you have more than one version of python installed you may need to run streamlit like so:
 
 ```
 python3 -m streamlit run pypi_streamlit.py
