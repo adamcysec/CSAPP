@@ -1,5 +1,7 @@
 # CSAPP - The Collection, Storage, and Analysis of Python Packages Tool
 
+Read the [Git Book](https://adamcysec.gitbook.io/csapp/) to learn about CSAPP and how adversaries are targeting PyPI
+
 ## Synposis
 
 CSAPP (*c-sap*) is a suite of tools for Collecting, Storing, and Analyzing Python Packages in PyPI to assist with threat hunting for malicious packages. 
