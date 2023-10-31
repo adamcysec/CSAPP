@@ -53,7 +53,7 @@ git clone https://github.com/adamcysec/CSAPP.git
 
 3. Pip install any missing dependencies 
 
-4. Download the full PyPI data set CSV file: [pypi_info_db.csv](https://drive.google.com/file/d/1uYDHmn9lZ7EhrjFIMnhqKr_SpWjDFZqO)
+4. Download the full PyPI data set CSV file: [pypi_info_db.csv](https://drive.google.com/file/d/176E-5gb97egmRe8W9K-bh2YqHPn1W0PE/view?usp=sharing)
    - Due to the file size being about 160 MB, i have to host the file on Google Drive.
 
 5. Store the data set CSV file in the CSAPP directory
@@ -98,4 +98,4 @@ Note: if you have more than one version of python installed you may need to run 
 python3 -m streamlit run pypi_streamlit.py
 ```
 
-Download the full PyPI data set CSV file: [pypi_info_db.csv](https://drive.google.com/file/d/1uYDHmn9lZ7EhrjFIMnhqKr_SpWjDFZqO)
+Download the full PyPI data set CSV file: [pypi_info_db.csv]([https://drive.google.com/file/d/1uYDHmn9lZ7EhrjFIMnhqKr_SpWjDFZqO](https://drive.google.com/file/d/176E-5gb97egmRe8W9K-bh2YqHPn1W0PE/view?usp=sharing)https://drive.google.com/file/d/176E-5gb97egmRe8W9K-bh2YqHPn1W0PE/view?usp=sharing)
